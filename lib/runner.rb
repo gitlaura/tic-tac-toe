@@ -1,17 +1,17 @@
 class Runner
+	attr_reader :game 
+
 	def initialize
 		@game = Game.new
-		board = Board.new
-		play_game(board)
 	end
 
-	def play_game(board)
+	def play_game
 		@game.welcome
-		until @game.game_over?(board) do
-			@game.show_board(board)
+		until @game.game_over? do
+			@game.display_board
 			player = @game.update_player(player)
-			selection = @game.get_selection(player, board)
-			board = @game.update_board(board)
+			selection = @game.get_selection(player)
+			@game.update_board(player, selection)
 		end
 		@game.end_game
 	end
