@@ -55,12 +55,29 @@ class ComputerSpaceSelector
 
 		def select_spot(computer_spaces, human_spaces, winning_combinations)
 			return middle_spot if middle_spot_open?(computer_spaces, human_spaces)
+			return corner_spot(human_spaces) if sides_taken?(human_spaces)
 			return first_spot if computer_spaces.empty?
+			return 3 if computer_spaces == [1]
 			select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
 		end
 
 		def middle_spot_open?(computer_spaces, human_spaces)
-			!computer_spaces.include?(middle_spot) && !human_spaces.include?(middle_spot)
+			!(computer_spaces + human_spaces).include?(middle_spot)
+		end
+
+		def sides_taken?(human_spaces)
+			side_combos.each do |corner, sides|
+				return true if sides == human_spaces
+			end
+			false
+		end
+				
+		def corner_spot(human_spaces)
+			side_combos.each do |corner, sides|
+				if sides == human_spaces
+					return corner
+				end
+			end
 		end
 
 		def select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
@@ -95,6 +112,10 @@ class ComputerSpaceSelector
 
 		def middle_spot
 			5
+		end
+
+		def side_combos
+			{1 => [2,4], 3 => [2,6], 7 => [4,8], 9 => [6,8]}
 		end
 
 		def first_spot
