@@ -1,7 +1,7 @@
 require 'computer_player.rb'
 
 describe "Computer Player" do
-	let(:board){Board.new}
+	let(:board){Board.new(GameRules.new)}
 
 	it "makes a board selection" do
 		board.spaces = [1,2,"X","X","O","O",7,8,"X"]

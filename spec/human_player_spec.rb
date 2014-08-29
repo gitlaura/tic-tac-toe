@@ -1,7 +1,7 @@
 require 'human_player.rb'
 
 describe "Human player" do 
-	let(:board){Board.new}
+	let(:board){Board.new(GameRules.new)}
 
 	it "selects a space" do
 		expect(CommandLineMessages).to receive(:display_board)

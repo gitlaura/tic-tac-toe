@@ -1,32 +1,25 @@
 require 'computer_space_selector'
 
 describe "Computer space selector" do
-	let(:winning_combinations){[
-														[1,2,3],
-														[4,5,6],
-														[7,8,9],
-														[1,4,7],
-														[2,5,8],
-														[3,6,9],
-														[1,5,9],
-														[3,5,7]
-													]}
+	let(:board){Board.new(GameRules.new)}
+	let(:winning_combinations){board.winning_combinations}
+
 	context "makes an intelligent move" do 
 		it "if computer is about to win" do
-			computer_spaces, human_spaces = [2,5], [1,3,4]
-			selection = ComputerSpaceSelector.make_selection(computer_spaces, human_spaces, winning_combinations)
+			board.spaces = ["X", "O", "X","X","O",6,7,8,9]
+			selection = ComputerSpaceSelector.make_selection(board)
 			expect(selection).to eq(8)
 		end
 
 		it "if human is about to win" do
-			computer_spaces, human_spaces = [5], [7,9]
-			selection = ComputerSpaceSelector.make_selection(computer_spaces, human_spaces, winning_combinations)
+			board.spaces = [1,2,3,4,"O",6,"X",8,"X"]
+			selection = ComputerSpaceSelector.make_selection(board)
 			expect(selection).to eq(8)
 		end
 
 		it "if nobody can win yet" do
-			computer_spaces, human_spaces = [5,8], [2,7,9]
-			selection = ComputerSpaceSelector.make_selection(computer_spaces, human_spaces, winning_combinations)
+			board.spaces = [1,"X",3,4,"O",6,"X","O","X"]
+			selection = ComputerSpaceSelector.make_selection(board)
 			expect(selection).to eq(4)
 		end
 	end

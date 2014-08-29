@@ -1,6 +1,10 @@
 class ComputerSpaceSelector
 	class << self
-		def make_selection(computer_spaces, human_spaces, winning_combinations)
+		def make_selection(board)
+			computer_spaces = board.computer_spaces
+			human_spaces = board.human_spaces
+			winning_combinations = board.winning_combinations
+
 			winning_computer_combo = find_computer_winning_combo(computer_spaces, human_spaces, winning_combinations)
 			return select_computer_winning_spot(computer_spaces, winning_computer_combo) if !winning_computer_combo.nil?
 

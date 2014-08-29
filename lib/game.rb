@@ -2,12 +2,13 @@ require_relative 'command_line_messages.rb'
 require_relative 'board.rb'
 require_relative 'human_player.rb'
 require_relative 'computer_player.rb'
+require_relative 'game_rules.rb'
 
 class Game
 	attr_accessor :board
 
 	def initialize
-		@board = Board.new
+		@board = Board.new(GameRules.new)
 	end
 
 	def welcome
@@ -57,7 +58,7 @@ class Game
 	end
 
 	def tie_game?
-		return true if (board.human_spaces + board.computer_spaces).length == 9
+		return true if (board.human_spaces + board.computer_spaces).length == @board.spaces.length
 		false
 	end
 
