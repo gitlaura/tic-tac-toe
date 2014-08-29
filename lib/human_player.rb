@@ -1,14 +1,12 @@
-require_relative 'command_line_io.rb'
+require_relative 'command_line_messages.rb'
 
 class HumanPlayer
 	class << self
-		include CommandLineIO
-
 		def select_board_space(board)
-			give "Player 1, please select an open space (1-9) on the board ."
-			selection = receive.to_i
+			CommandLineMessages.display_board(board.spaces)
+			selection = CommandLineMessages.request_selection
 			return selection if valid_board_space?(selection, board.spaces)
-			give "Not a valid board space! Please try again."
+			CommandLineMessages.display_invalid_selection
 			select_board_space(board)
 		end
 

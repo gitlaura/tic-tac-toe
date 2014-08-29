@@ -27,12 +27,8 @@ class Board
 	end
 
 	def find_taken_spaces(board_spaces, marker)
-		taken_spaces = []
-		board_spaces.each_with_index do |space,index|
-			if space == marker
-				taken_spaces << index + 1
-			end
-		end
-		taken_spaces
+		spots = board_spaces.map.with_index {|space, index| index + 1 if space == marker}
+		spots.delete(nil)
+		spots
 	end
 end
