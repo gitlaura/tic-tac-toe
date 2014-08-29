@@ -1,5 +1,7 @@
 require_relative 'command_line_messages.rb'
 require_relative 'board.rb'
+require_relative 'human_player.rb'
+require_relative 'computer_player.rb'
 
 class Game
 	attr_accessor :board
@@ -17,16 +19,8 @@ class Game
 		false
 	end
 
-	def display_board
-		CommandLineMessages.display_board(@board.spaces)
-	end
-
 	def update_player(player = nil)
-		if player == HumanPlayer
-			return ComputerPlayer 
-		else
-			HumanPlayer
-		end
+		return ComputerPlayer if player == HumanPlayer else HumanPlayer
 	end
 
 	def get_selection(player)
@@ -35,16 +29,16 @@ class Game
 
 	def update_board(player, selection)
 		if player == HumanPlayer
-			@board.spaces[selection - 1] = "X"
+			@board.spaces[selection - 1] = @board.human_marker
 		else
-			@board.spaces[selection - 1] = "O"
+			@board.spaces[selection - 1] = @board.computer_marker
 		end
 	end
 
 	def end_game
-		return CommandLineMessages.display_human_win if person_won?(@board.human_spaces)
-		return CommandLineMessages.display_computer_win if person_won?(@board.computer_spaces)
-		CommandLineMessages.display_tie
+		return CommandLineMessages.display_human_win(@board.spaces) if person_won?(@board.human_spaces)
+		return CommandLineMessages.display_computer_win(@board.spaces) if person_won?(@board.computer_spaces)
+		CommandLineMessages.display_tie(@board.spaces)
 	end
 
 	def person_won?(spaces)
@@ -53,7 +47,7 @@ class Game
 			spaces.each do |taken_space|
 				if winning_combination.include?(taken_space)
 					matches += 1
-					return true if matches == 3
+					return true if matches == spots_needed_to_win
 				end
 			end
 			matches = 0
@@ -62,7 +56,11 @@ class Game
 	end
 
 	def tie_game?
-		return true if (board.human_spaces.length + board.computer_spaces.length) == 9
+		return true if (board.human_spaces + board.computer_spaces).length == 9
 		false
+	end
+
+	def spots_needed_to_win
+		Math.sqrt(@board.spaces.length.to_i)
 	end
 end

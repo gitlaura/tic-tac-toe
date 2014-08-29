@@ -12,22 +12,16 @@ describe "Game" do
 
 	it "checks to see if the game is over" do
 		@game.board.spaces = [1,2,3,"O","O","O",7,"X","X"]
-		result = @game.game_over?
-		expect(result).to eq(true)
-	end
-
-	it "displays the board" do
-		expect(CommandLineMessages).to receive(:display_board)
-		@game.display_board
+		expect(@game.game_over?).to eq(true)
 	end
 
 	context "updates the player" do
 		it "if player has not been selected yet" do
-			expect(@game.update_player).to be(HumanPlayer)
+			expect(@game.update_player).to eq(HumanPlayer)
 		end
 
 		it "if player is Human" do
-			expect(@game.update_player(HumanPlayer)).to be(ComputerPlayer)
+			expect(@game.update_player(HumanPlayer)).to eq(ComputerPlayer)
 		end
 	end
 

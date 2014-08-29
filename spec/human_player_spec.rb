@@ -4,8 +4,8 @@ describe "Human player" do
 	let(:board){Board.new}
 
 	it "selects a space" do
-		expect(HumanPlayer).to receive(:give)
-		expect(HumanPlayer).to receive(:receive){1}
+		expect(CommandLineMessages).to receive(:display_board)
+		expect(CommandLineMessages).to receive(:request_selection){1}
 		selection = HumanPlayer.select_board_space(board)
 		expect(selection).to eq(1)
 	end
