@@ -57,6 +57,7 @@ class ComputerSpaceSelector
 			return middle_spot if middle_spot_open?(computer_spaces, human_spaces)
 			return corner_spot(human_spaces) if sides_taken?(human_spaces)
 			return first_spot if computer_spaces.empty?
+			return 3 if computer_spaces == [1]
 			select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
 		end
 

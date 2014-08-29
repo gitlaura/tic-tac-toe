@@ -20,7 +20,8 @@ class Game
 	end
 
 	def update_player(player = nil)
-		return ComputerPlayer if player == HumanPlayer else HumanPlayer
+		return ComputerPlayer if player == HumanPlayer
+		HumanPlayer
 	end
 
 	def get_selection(player)
