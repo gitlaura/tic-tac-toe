@@ -28,14 +28,14 @@ describe "Computer space selector" do
 		it "should return spot" do
 			computer_spaces = [2,5]
 			human_spaces = [1,4,6]
-			result = ComputerSpaceSelector.find_winning_spot(computer_spaces, human_spaces, winning_combinations)
+			result = ComputerSpaceSelector.find_open_spot(computer_spaces, human_spaces, winning_combinations,1)
 			expect(result).to eq(8)
 		end
 
 		it "should not return a spot" do 
 			human_spaces = [1,8]
 			computer_spaces = [3]
-			result = ComputerSpaceSelector.find_winning_spot(human_spaces, computer_spaces, winning_combinations)
+			result = ComputerSpaceSelector.find_open_spot(human_spaces, computer_spaces, winning_combinations,1)
 			expect(result).to eq(nil)
 		end
 	end
@@ -65,11 +65,5 @@ describe "Computer space selector" do
 		computer_spaces, human_spaces = [4], [1,3]
 		result = ComputerSpaceSelector.middle_spot_open?(computer_spaces, human_spaces)
 		expect(result).to eq(true)
-	end
-
-	it "selects an open space in the computers favor" do
-		computer_spaces, human_spaces = [5], [1,3]
-		selection = ComputerSpaceSelector.select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
-		expect(selection).to eq(4)
 	end
 end
