@@ -5,63 +5,30 @@ class ComputerSpaceSelector
 			human_spaces = board.human_spaces
 			winning_combinations = board.winning_combinations
 
-			winning_computer_combo = find_computer_winning_combo(computer_spaces, human_spaces, winning_combinations)
-			return select_computer_winning_spot(computer_spaces, winning_computer_combo) if !winning_computer_combo.nil?
+			winning_computer_spot = find_winning_spot(computer_spaces, human_spaces, winning_combinations)
+			return winning_computer_spot if !winning_computer_spot.nil?
 
-			winning_human_combo = find_human_winning_combo(human_spaces, computer_spaces, winning_combinations)
-			return block_human_from_winning(human_spaces, winning_human_combo) if !winning_human_combo.nil?
+			winning_human_spot = find_winning_spot(human_spaces, computer_spaces, winning_combinations)
+			return winning_human_spot if !winning_human_spot.nil?
 
 			select_spot(computer_spaces, human_spaces, winning_combinations)
 		end
 
-		def find_computer_winning_combo(computer_spaces, human_spaces, winning_combinations)
-			find_winning_combo(computer_spaces, human_spaces, winning_combinations)
-		end
-
-		def find_human_winning_combo(human_spaces, computer_spaces, winning_combinations)
-			find_winning_combo(human_spaces, computer_spaces, winning_combinations)
-		end
-
-		def find_winning_combo(spaces, other_person_spaces, winning_combinations)
-			matches = 0
+		def find_winning_spot(spaces, other_person_spaces, winning_combinations)
+			winning_spot = []
 			winning_combinations.each do |winning_combination|
-				spaces.each do |space|
-					if winning_combination.include?(space)
-						matches += 1
-						return winning_combination if matches == spots_needed_to_win - 1 && valid_winning_combo?(winning_combination, other_person_spaces)
-					end
-				end
-				matches = 0
-			end	
+				spots_left = winning_combination - spaces
+				winning_spot = spots_left - other_person_spaces if spots_left.size == 1
+				return winning_spot[0] if winning_spot.size == 1
+			end
 			nil
-		end
-
-		def valid_winning_combo?(winning_combination, other_person_spaces)
-			winning_combination.each do |winning_space|
-				return false if other_person_spaces.include?(winning_space)
-			end
-			true
-		end
-
-		def select_computer_winning_spot(computer_spaces, winning_combination)
-			select_winning_spot(computer_spaces, winning_combination)
-		end
-
-		def block_human_from_winning(human_spaces, winning_combination)
-			select_winning_spot(human_spaces, winning_combination)
-		end
-
-		def select_winning_spot(taken_spaces, winning_combination)
-			winning_combination.each do |winning_space|
-				return winning_space if !taken_spaces.include?(winning_space)
-			end
 		end
 
 		def select_spot(computer_spaces, human_spaces, winning_combinations)
 			return middle_spot if middle_spot_open?(computer_spaces, human_spaces)
-			return corner_spot(human_spaces) if sides_taken?(human_spaces)
 			return first_spot if computer_spaces.empty?
-			return 3 if computer_spaces == [1]
+			return corner_spot(human_spaces) if sides_taken?(human_spaces)
+			return top_right_corner if computer_spaces == [first_spot]
 			select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
 		end
 
@@ -78,35 +45,16 @@ class ComputerSpaceSelector
 				
 		def corner_spot(human_spaces)
 			side_combos.each do |corner, sides|
-				if sides == human_spaces
-					return corner
-				end
+				return corner if sides == human_spaces
 			end
 		end
 
-		def select_open_space_in_computers_favor(computer_spaces, human_spaces, winning_combinations)
-			possible_winning_combos = find_possible_winning_combinations(computer_spaces, winning_combinations)
-			all_taken_spaces = computer_spaces + human_spaces
-			selection = select_open_spot_in_combo(all_taken_spaces, possible_winning_combos)
-		end
-
-		def find_possible_winning_combinations(spaces, winning_combinations)
-			possible_winning_combos = []
+		def select_open_space_in_computers_favor(spaces, other_person_spaces, winning_combinations)
+			winning_spots = []
 			winning_combinations.each do |winning_combination|
-				spaces.each do |taken_space|
-					if winning_combination.include?(taken_space)
-						possible_winning_combos << winning_combination
-					end
-				end
-			end
-			possible_winning_combos
-		end
-
-		def select_open_spot_in_combo(all_taken_spaces, possible_winning_combos)
-			possible_winning_combos.each do |possible_combo|
-				possible_combo.each do |possible_space|
-					return possible_space if !all_taken_spaces.include?(possible_space)
-				end
+				spots_left = winning_combination - spaces
+				winning_spots = spots_left - other_person_spaces if spots_left.size == 2
+				return winning_spots.first if winning_spots.size == 2
 			end
 		end
 
@@ -124,6 +72,10 @@ class ComputerSpaceSelector
 
 		def first_spot
 			1
+		end
+
+		def top_right_corner
+			3
 		end
 	end
 end
